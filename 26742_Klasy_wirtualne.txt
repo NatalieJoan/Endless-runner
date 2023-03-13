@@ -1,0 +1,106 @@
+using System;
+
+namespace Employees
+{
+    class Employer
+    {
+        private float a, b;
+        private string str1, str2, str3;
+        public Employer(float _a = 0, float _b = 0)
+        {
+            a = _a;
+            b = _b;
+        }
+        public Employer(string _str1, string _str2, string _str3)
+        {
+            str1 = _str1;
+            str2 = _str2;
+            str3 = _str3;
+        }
+        public virtual float Pension()
+        {
+            return 0;
+        }
+        public virtual string Data()
+        {
+            return " ";
+        }
+        public float A
+        {
+            get { return a; }
+            set { a = value; }
+        }
+        public float B
+        {
+            get { return b; }
+            set { b = value; }
+        }
+        public string Str1
+        {
+            get { return str1; }
+            set { str1 = value; }
+        }
+        public string Str2
+        {
+            get { return str2; }
+            set { str2 = value; }
+        }
+        public string Str3
+        {
+            get { return str3; }
+            set { str3 = value; }
+        }
+    }
+    class Salary : Employer
+    {
+        private float salary, hoursPerMonth;
+        public Salary(float _salary = 0, float _hoursPerMonth = 0)
+        {
+            salary = _salary;
+            hoursPerMonth = _hoursPerMonth;
+        }
+        public override float Pension()
+        {
+            return salary * hoursPerMonth;
+        }
+    }
+    class Info : Employer
+    {
+        private string name, surname, position;
+        public Info(string _name, string _surname, string _position)
+        {
+            name = _name;
+            surname = _surname;
+            position = _position;
+        }
+        public override string Data()
+        {
+            return "Name: " + name + " " + "\nSurname: " + surname + "\nPosition: " + position;
+        }
+    }
+    internal class Program
+    {
+        static void Main()
+        {
+            Employer[] employers = new Employer[3];
+            employers[0] = new Salary(22, 96);
+            employers[1] = new Salary(28, 150);
+            employers[2] = new Salary(34, 160);
+
+            Employer[] employers2 = new Employer[3];
+            employers2[0] = new Info("Ludwika", "Kot", "Sprzedawca");
+            employers2[1] = new Info("Robert", "Janicki", "Prawnik");
+            employers2[2] = new Info("Joanna", "Lisiak", "Dyrektor");
+
+            int i = 0;
+            foreach (Employer employer2 in employers2)
+            {
+                Console.WriteLine("Employer nr " + (i+1));
+                Console.WriteLine(employer2.Data());
+                Console.WriteLine("Salary per month: " + employers[i++].Pension() + " PLN");
+                Console.WriteLine();
+            }
+            Console.ReadKey();
+        }
+    }
+}

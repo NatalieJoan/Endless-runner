@@ -1,0 +1,130 @@
+using System;
+using System.IO;
+
+namespace Test
+{
+    public class Matrix
+    {
+        private int[,] _matrix = new int[10, 10];
+        private int _size0, _size1;
+        public Matrix(string input)
+        {
+            _size0 = input.Split('\n').Length; 
+            _size1 = input.Split('\n')[0].Trim().Split(' ').Length;
+            _matrix = this.IntForm(input);
+        }
+        public void SizeOfMatrix(int size0, int size1)
+        {
+            int[,] elastic_matrix = new int[size0, size1];
+            _matrix = elastic_matrix;
+            _size0 = size0;
+            _size1 = size1;
+        }
+        public int this[int x, int y]
+        {
+            get { return _matrix[x, y]; }
+            set { _matrix[x, y] = value; }
+        }
+        public int[,] IntForm(string input)
+        {
+            int i = 0, j;
+            int[,] matrix_inside = new int[_size0, _size1];
+            foreach (var row in input.Split('\n'))
+            {
+                j = 0;
+                foreach (var col in row.Trim().Split(' '))
+                {
+                    matrix_inside[i, j] = int.Parse(col.Trim());
+                    j++;
+                }
+                i++;
+            }
+            return matrix_inside;
+        }
+        public void PrintMatrix()
+        {
+            for (int i = 0; i < _matrix.GetLength(0); i++)
+            {
+                for (int j = 0; j < _matrix.GetLength(1); j++)
+                {
+                    Console.Write(_matrix[i, j]);
+                    Console.Write(' ');
+                }
+                Console.WriteLine();
+            }
+        }
+        public void Transpose()
+        {
+            int[,] result = new int[_matrix.GetLength(0), _matrix.GetLength(1)];
+
+            for (int i = 0; i < _matrix.GetLength(0); i++)
+            {
+                for (int j = 0; j < _matrix.GetLength(1); j++)
+                {
+                    result[j, i] = _matrix[i, j];
+                }
+            }
+            _matrix = result;
+        }
+        public Matrix() { }
+        public static Matrix operator +(Matrix m1, Matrix m2)
+        {
+            Matrix newMatrix = new Matrix();
+            // ustalanie rozmiaru matrixa
+            newMatrix.SizeOfMatrix(8, 8);
+ 
+            for (int i = 0; i < m1._size0; i++)
+            {
+                for (int j = 0; j < m1._size1; j++)
+                {
+                    newMatrix[i,j] = m1[i,j] + m2[i,j];
+                }
+            }
+            return newMatrix;
+        }
+        public static Matrix operator *(Matrix m1, Matrix m2)
+        {
+            Matrix newMatrix = new Matrix();
+            newMatrix.SizeOfMatrix(8, 8);
+
+            for (int i = 0; i < m1._size0; i++)
+            {
+                for (int j = 0; j < m1._size1; j++)
+                {
+                    newMatrix[i, j] = m1[i, j] * m2[i, j];
+                }
+            }
+            return newMatrix;
+        }
+    }
+    public class Program
+    {
+        static void Main()
+        {
+            string input = File.ReadAllText(@"D:\folders\26742_zad_2\Test\bin\Debug\Matrix.txt");
+            Matrix m1 = new Matrix(input);
+            Matrix m2 = new Matrix(input);
+
+            Console.WriteLine("Matrix before transpose: ");
+            m1.PrintMatrix();
+
+            Console.WriteLine("Matrix after transpose: ");
+            m2.Transpose();
+            m2.PrintMatrix();
+
+            Console.WriteLine("Sum of two matrixes: ");
+            Matrix m3 = m1 + m2;
+            m3.PrintMatrix();
+
+            Console.WriteLine("Matrix Multiplication: ");
+            Matrix m4 = m1 * m2;
+            m4.PrintMatrix();
+        }
+    }
+}
+/* zalaczony plik Matrix.txt
+ * 1 10 15 8
+ * 9 27 9 2
+ * 8 2 30 40
+ * 5 54 12 3
+ */

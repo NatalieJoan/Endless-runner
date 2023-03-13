@@ -1,0 +1,124 @@
+using System;
+using System.Collections;
+
+namespace TypyGeneryczne_2
+{
+    public class Food
+    {
+        private string name, type;
+        private int calories;
+
+        public Food(String _name, String _type, int _calories)
+        {
+            name = _name;
+            type = _type;
+            calories = _calories;
+        }
+        public override string ToString()
+        {
+            return "Name: " + name + "\r\n" + "Type of food: " + type + "\r\n"
+                + "Calories (per 100g): " + calories.ToString() + " kcal\r\n";
+        }
+    }
+    interface IFood_Peek
+    {
+        void Peek();
+    }
+    interface IFood_Dequeue
+    {
+        void Dequeue();
+    }
+    class Queue<T> : IFood_Peek, IFood_Dequeue
+    {
+        private T[] queue;
+        private int i = 0;
+        private int capacity, front, rear;
+
+        public Queue(int _capacity)
+        {
+            front = 0;
+            rear = 0;
+            capacity = _capacity;
+            queue = new T[capacity];
+        }
+        public void Enqueue(T element)
+        {
+            if (capacity == rear)
+            {
+                Console.Write("Queue is full");
+                return;
+            }
+            else
+            {
+                queue[rear] = element;
+                rear++;
+            }
+            return;
+        }
+        public void Dequeue()
+        {
+            if (front == rear)
+            {
+                Console.WriteLine("Queue is empty");
+                return;
+            }
+            else
+            {
+                for (i = 0; i < rear - 1; i++)
+                {
+                    queue[i] = queue[i + 1];
+                }
+                if (rear < capacity)
+                    queue[rear] = queue[0];
+
+                rear--;
+            }
+            return;
+        }
+        public void Peek()
+        {
+            if (front == rear)
+            {
+                Console.WriteLine("Queue is empty");
+                return;
+            }
+            Console.WriteLine("FIRST ELEMENT IN QUEUE: \n\n" + queue[front]);
+            return;
+        }
+
+        public void Display()
+        {
+            if (front == rear)
+            {
+                Console.WriteLine("Queue is empty");
+            }
+            for (i = front; i < rear; i++)
+            {
+                Console.WriteLine("{0} ", queue[i]);
+            }
+        }
+    }
+    class Program
+    {
+        static void Main()
+        {
+            Queue<Food> food = new Queue<Food>(5);
+            food.Enqueue(new Food("Fish and Chips", "Dinner", 250));
+            food.Enqueue(new Food("Scramble egg", "Breakfast", 312));
+            food.Enqueue(new Food("Cookies", "Sweets", 456));
+            food.Enqueue(new Food("Bear", "Drink", 50));
+
+            Console.WriteLine("ALL ELEMENTS IN QUEUE: \n");
+            food.Display();
+
+            food.Dequeue();
+
+            Console.WriteLine("QEUEU AFTER DELETING FIRST ELEMENT: \n");
+            food.Display();
+
+            food.Peek();
+
+            Console.ReadKey();
+        }
+    }
+}
